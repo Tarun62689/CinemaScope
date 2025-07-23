@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaScope</title>
+    <link rel="icon" href="/static/images/favicon-32x32.png" type="image/x-icon">
+    <style>
+        body {
+            color: #222;
+            font-family: Courier New;
+            font-size: 14px;
+            line-height: 24px;
+            margin: 0;
+            /* Ensure no default margin */
+        }
+
+        /* Overlay Container */
+        .hero {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 540px;
+        }
+
+        /* Background Image */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/Design.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .logo {
+            color: #fff;
+            font-family: Courier New;
+            width: 425px;
+            height: auto;
+            font-size: 49px;
+            margin: 20px 0;
+            /* Adjust margins for better spacing */
+        }
+
+        header {
+            position: fixed;
+            /* Fix the header to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Ensure the header spans the full width */
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Optional: Make the header semi-transparent */
+            border-radius: 50px 20px;
+            color: white;
+            padding: 2px;
+            z-index: 1000;
+            /* Ensure the header stays on top of the background and overlay */
+        }
+
+
+
+
+        .navbar {
+            display: flex;
+            font-family: Courier New;
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+            margin-left: -100px;
+            background-color: rgba(0, 0, 0, 0);
+            padding: 10px 0;
+            text-align: center;
+            margin-right: 30px;
+            margin-bottom: 1px;
+        }
+
+        .navbar a {
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            color: white;
+        }
+
+        nav a:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            text-align: center;
+            color: white;
+            margin-left: 20px;
+            font-size: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color: inherit;
+            font-family: inherit;
+            /* Important for vertical align on mobile phones */
+            margin: 0;
+            /* Important for vertical align on mobile phones */
+        }
+
+        .dropdown button:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 20px 50px;
+            z-index: 1;
+            padding: 12px 16px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .hero {
+            width: 100%;
+            /* Ensures the hero section takes the full width */
+        }
+
+        .header {
+            display: flex;
+            /* Makes the header a flex container */
+            justify-content: space-between;
+            /* Space between logo and navbar */
+            align-items: center;
+            /* Centers items vertically */
+            padding: 10px 20px;
+            /* Adds padding */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Optional background color */
+            border-radius: 50px 20px;
+        }
+
+        .logo {
+            font-size: 45px;
+            /* Adjust logo font size */
+            font-weight: bold;
+            /* Makes logo bold */
+            margin-right: 500px;
+        }
+
+        .navbar {
+            display: flex;
+            /* Makes the navbar a flex container */
+            gap: 20px;
+            /* Space between navbar items */
+        }
+
+        .dropdown {
+            position: relative;
+            /* Positioning for dropdown */
+        }
+
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            /* Shows dropdown on hover */
+        }
+
+        .h2 {
+            font-family: Courier New;
+            font-size: 28px;
+            color: white;
+            font: bold;
+            margin-right: 750px;
+            margin-top: 50px;
+        }
+
+        .h1 {
+            font-family: Courier New;
+            font-size: 38px;
+            color: white;
+            font: bold;
+            margin-right: 750px;
+            margin-top: 350px;
+        }
+
+        .section {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 540px;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/background overlay3.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .section-tittle {
+            font-family: Courier New;
+            font-size: 38px;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+
+        .container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow wrapping to create more boxes */
+            gap: 1px;
+            /* Space between boxes */
+            margin-bottom: 50px;
+        }
+
+        .container .glass {
+            position: relative;
+            width: 180px;
+            height: 200px;
+            background: linear-gradient(#fff2, transparent);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 25px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s;
+            border-radius: 10px;
+            margin: 18px;
+            backdrop-filter: blur(10px);
+            transform: none;
+            /* Remove rotation effect */
+        }
+
+
+
+        .container .glass::before {
+            content: attr(data-text);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .container .glass svg {
+            font-size: 2.5em;
+            fill: #fff;
+        }
+
+        /* Search Bar Container */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            text-decoration: none;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0);
+            padding: 10px;
+            border-radius: 20px;
+            width: 40%;
+            margin-top: 100px;
+            margin-right: 700px;
+        }
+
+
+
+
+        /* Search Input Styling */
+        #search-input {
+            width: 60%;
+            color: black;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        /* Search Button */
+        #search-btn {
+            background-color: rgb(192, 172, 123);
+            /* Prime light blue */
+            border: none;
+            color: rgb(8, 0, 0);
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            margin-left: 10px;
+        }
+
+        #search-btn:hover {
+            background-color: #5e4405;
+        }
+
+
+        /* Mic Button */
+        #mic-btn {
+            background-color: rgb(192, 172, 123);
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50px;
+            margin-left: 5px;
+            height: auto;
+            width: auto;
+        }
+
+        #mic-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        #mic-btn:hover {
+            background-color: #5e4405;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+
+        footer {
+            background-image: url(/static/images/background\ overlay3.png);
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            text-align: left;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+        }
+
+        .footer-column h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul {
+            list-style-type: none;
+            text-align: center;
+            font-size: 18px;
+            padding: 0;
+        }
+        h4{
+            text-align: center;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .footer-column form {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column input[type="email"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .footer-column button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .footer-message {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 20px;
+        }
+
+        .footer-bottom p {
+            margin: 5px;
+            font-size: 18px;
+        }
+
+        .footer-bottom a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .Contact {
+            margin-right: 10px;
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <header class="header">
+            <img src="static/images/logo.png" alt="logo.png"   style="margin-left: 18px;" height="100px" width="100px">
+            <a href="/index" class="logo"  style="margin-left:10px;">CinemaScope</a>
+            <nav>
+                <div class="navbar">
+                    <a href="/index">Home</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Genres</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('display_movies_by_genre', genre='action') }}">Action</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='comedy') }}">Comedy</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='drama') }}">Drama</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='thriller') }}">Thriller</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='animation') }}">Animation</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='romance') }}">Romance</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='crime') }}">Crime</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='sci-fi') }}">Science Fiction</a>
+                        </div>
+                    </div>
+                    <a href="/question">Mood</a>
+                    <a href="/web_series">Series</a>
+                    <a href="/contact_us">Contact</a>
+                    <a href="/about_us">About</a>
+                </div>
+            </nav>
+        </header>
+        <p class="h1">Movie Recommendation Engine</p>
+        <p class="h2">Unlock the magic of film with curated picks just for you.</p>
+        <!-- Search Bar Container -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search for a movie" aria-label="Search">
+            <button id="search-btn">Search</button>
+            <button id="mic-btn"><img src="https://img.icons8.com/material-outlined/24/000000/microphone.png"
+                    id="mic-icon"></button>
+        </div>
+        <p id="output"></p> 
+
+
+    </div>
+    <div class="section">
+
+        <div class="Container">
+            <p class="section-tittle">Genres</p>
+            <div class="container">
+
+                <a href="{{ url_for('display_movies_by_genre', genre='action') }}" style="display: block;">
+                    <div data-text="Action" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/Aaction.gif" width="100%" height="80%" />
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('display_movies_by_genre', genre='comedy') }}" style="display: block;">
+                    <div data-text="Comedy" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/Ccomedy.gif" width="100%" height="80%" />
+                            <path d=""></path>
+                        </svg>
+                    </div>
+                </a>
+                <a href="{{ url_for('display_movies_by_genre', genre='drama') }}" style="display: block;">
+                    <div data-text="Drama" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/Ddrama.gif" width="100%" height="80%" />
+                            <path d=""></path> 
+                        </svg>
+                    </div>
+                </a>
+                <a href="{{ url_for('display_movies_by_genre', genre='thriller') }}" style="display: block;">
+                    <div data-text="Thriller" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/Tthriller.gif" width="100%" height="80%" />
+                            <path d=""></path> 
+                        </svg>
+                    </div>
+                </a>
+            </div>
+            <div class="container">
+                <a href="{{ url_for('display_movies_by_genre', genre='romance') }}" style="display: block;">
+                    <div data-text="Romance" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/rromance1.webp" width="100%" height="80%" />
+                            <path d=""></path> 
+                        </svg>
+                    </div>
+                </a>
+                <a href="{{ url_for('display_movies_by_genre', genre='crime') }}" style="display: block;">
+                    <div data-text="Crime" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/ccrime.gif" width="100%" height="80%" />
+                            <path d=""></path> 
+                        </svg>
+                    </div>
+                </a>
+                <a href="{{ url_for('display_movies_by_genre', genre='animation') }}" style="display: block;">
+                    <div data-text="Animation" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/Aanimation.gif" width="100%" height="80%" />
+                            <path d=""></path> 
+                        </svg>
+                    </div>
+                </a>
+                <a href="{{ url_for('display_movies_by_genre', genre='sci-fi') }}" style="display: block;">
+                    <div data-text="Science-fiction" style="--r:-15;" class="glass">
+                        <svg viewBox="0 0 180 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <image href="/static/images/Sscience-fiction.gif" width="100%" height="80%" />
+                            <path d=""></path> 
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div class="section">
+       
+        <footer>
+            <div class="footer-container">
+                <div class="footer-message">
+                    <p><strong>"CinemaScope: Your go-to for personalized movie picks, mood matches, genre lists, and top web series—all in one place!"</strong></p>
+                    
+                    <div class="empty">
+                        
+                    </div>
+                    
+                </div>
+                <div class="footer-column">
+                    <h4>Keep Exploring</h4>
+                    <ul>
+                        <li><a href="/index">Home</a></li>
+                        <li><a href="/index">Genres</a></li>
+                        <li><a href="/question">Mood</a></li>
+                        <li><a href="/web_series">Series</a></li>
+                        <li><a href="/about_us">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="/contact_us">contact_us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <div class="footer-bottom">
+                <img src="static/images/logo.png" alt="logo.png"     style="margin-left: 20px;" height="80px" width="80px">
+                <p>&copy; 2024 CinemaScope. All rights reserved.</p>
+                <p>Site Credits | Terms & Conditions | <a style="color: #fff;" href="/policy">Privacy Policy</a>
+                </p>
+            </div>
+        </footer>
+
+
+    </div>
+    <script>//alert("welcome");
+        const micBtn = document.getElementById('mic-btn');
+        const micIcon = document.getElementById('mic-icon');
+        const searchInput = document.getElementById('search-input'); // Target the search input field
+        let isRecording = false; // Track recording state
+
+        // Check for browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert('Speech Recognition is not supported in this browser. Please use Chrome or Edge.');
+            micBtn.disabled = true; // Disable the mic button if SpeechRecognition is not supported
+        } else {
+            const recognition = new SpeechRecognition();
+
+            recognition.continuous = true; // Capture results continuously
+            recognition.interimResults = true; // Capture partial results
+            recognition.lang = 'en-US'; // Set the language to English
+
+            // Toggle the microphone icon and recording state
+            micBtn.addEventListener('click', () => {
+                if (isRecording) {
+                    // Stop recognition
+                    recognition.stop();
+                    micIcon.src = "https://img.icons8.com/material-outlined/24/000000/microphone.png";
+                    isRecording = false;
+                } else {
+                    // Start recognition
+                    recognition.start();
+                    micIcon.src = "https://img.icons8.com/material-outlined/24/000000/microphone-slash.png";
+                    isRecording = true;
+                }
+            });
+
+            // When speech recognition captures a result (real-time typing)
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                searchInput.value = transcript; // Insert real-time transcribed text into the search input
+            };
+
+            // Handle errors (e.g., if speech recognition fails)
+            recognition.onerror = (event) => {
+                console.error('Speech Recognition Error:', event.error);
+                micIcon.src = "https://img.icons8.com/material-outlined/24/000000/microphone.png";
+                isRecording = false;
+            };
+
+            // When speech recognition ends (either manually or naturally)
+            recognition.onend = () => {
+                micIcon.src = "https://img.icons8.com/material-outlined/24/000000/microphone.png";
+                isRecording = false;
+            };
+        }
+        // Function to handle search
+        function handleSearch() {
+            // Get the search input value
+            const searchQuery = document.getElementById('search-input').value.trim();
+
+            // Check if the input is not empty
+            if (searchQuery) {
+                // Log the search term
+                console.log("Searching for:", searchQuery);
+
+                // Redirect to the Flask route for search results
+                window.location.href = `/search-results?query=${encodeURIComponent(searchQuery)}`;
+            } else {
+                alert("Please enter a search term!");
+            }
+        }
+
+
+        // Add event listener for search button click
+        document.getElementById('search-btn').addEventListener('click', handleSearch);
+
+        // Add event listener to trigger search when pressing 'Enter' key
+        document.getElementById('search-input').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        });
+
+
+
+
+    </script>
+</body>
+
+</html>

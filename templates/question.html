@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood-CinemaScope</title>
+    <link rel="icon" href="/static/images/favicon-32x32.png" type="image/x-icon">
+    <style>
+        body {
+            color: #222;
+            background-color: black;
+            font-family: Courier New;
+            font-size: 14px;
+            line-height: 24px;
+            margin: 0;
+            /* Ensure no default margin */
+        }
+
+        /* Overlay Container */
+        .hero {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 540px;
+        }
+
+        /* Background Image */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/Design.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .logo {
+            color: #fff;
+            font-family: Courier New;
+            width: 425px;
+            height: auto;
+            font-size: 49px;
+            margin: 20px 0;
+            /* Adjust margins for better spacing */
+        }
+
+        header {
+            position: fixed;
+            /* Fix the header to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Ensure the header spans the full width */
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Optional: Make the header semi-transparent */
+            border-radius: 50px 20px;
+            color: white;
+            padding: 2px;
+            z-index: 1000;
+            /* Ensure the header stays on top of the background and overlay */
+        }
+
+
+
+
+        .navbar {
+            display: flex;
+            font-family: Courier New;
+            font-size: 20px;
+            align-items: center;
+            /* Vertically center navbar items */
+            justify-content: center;
+            margin-right: 50px;
+            background-color: rgba(0, 0, 0, 0);
+            /* Optional background color for the navbar */
+            padding: 10px 0;
+            text-align: center;
+            margin-right: 10px;
+            margin-bottom: 1px;
+        }
+
+        .navbar a {
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            color: white;
+        }
+
+        nav a:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            text-align: center;
+            color: white;
+            margin-left: 20px;
+            font-size: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color: inherit;
+            font-family: inherit;
+            /* Important for vertical align on mobile phones */
+            margin: 0;
+            /* Important for vertical align on mobile phones */
+        }
+
+        .dropdown button:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 20px 50px;
+            z-index: 1;
+            padding: 12px 16px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .hero {
+            width: 100%;
+            /* Ensures the hero section takes the full width */
+        }
+
+        .header {
+            display: flex;
+            /* Makes the header a flex container */
+            justify-content: space-between;
+            /* Space between logo and navbar */
+            align-items: center;
+            /* Centers items vertically */
+            padding: 10px 20px;
+            /* Adds padding */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Optional background color */
+            border-radius: 50px 20px;
+        }
+
+        .logo {
+            font-size: 45px;
+            /* Adjust logo font size */
+            font-weight: bold;
+            /* Makes logo bold */
+            margin-right: 500px;
+        }
+
+        .navbar {
+            display: flex;
+            /* Makes the navbar a flex container */
+            gap: 20px;
+            /* Space between navbar items */
+        }
+
+        .dropdown {
+            position: relative;
+            /* Positioning for dropdown */
+        }
+
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            /* Shows dropdown on hover */
+        }
+
+        .section {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 250px;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/background overlay3.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .h1 {
+            font-family: Courier New;
+            font-size: 38px;
+            color: white;
+            font: bold;
+            margin-top: 100px;
+        }
+        .back {
+            font-family: Courier New;
+            font-size: 18px;
+            color: rgb(192, 172, 123);
+            font: bold;
+            margin-bottom: 150px;
+        }
+
+        h2 {
+            font-family: Courier New;
+            font-size: 28px;
+            color: white;
+            font: bold;
+            margin-top: 10px;
+        }
+
+        #question {
+            font-family: Courier New;
+            font-size: 28px;
+            color: white;
+            font: bold;
+            margin-top: 50px;
+            border-radius: 20px;
+
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 20px;
+            text-align: right;
+            margin-top: auto;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #result-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            width: 80%;
+            margin-bottom: 150px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .movie-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            /* Full width inside the grid */
+            height: 300px;
+            /* Equal width and height to make them square */
+            background: rgba(34, 34, 34, 0.8);
+            border-radius: 10px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+            overflow: hidden;
+            /* To hide the description until clicked */
+        }
+
+        .movie-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .movie-item h3 {
+            color: #fff;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .description {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            color: white;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-item.active .description {
+            color: white;
+            display: block;
+            opacity: 1;
+        }
+
+        .movie-item:hover {
+            transform: scale(1.08);
+
+        }
+
+        .movie-item:hover img {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+
+        .movie.description {
+            color: white;
+        }
+
+        /* Basic movie item styling */
+        .movie-item {
+            position: relative;
+            width: 200px;
+            margin: 15px;
+            display: inline-block;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        #movie-details {
+            color: white;
+            font-size: 20px;
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Hover effect to show movie details */
+        .movie-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .movie-item .movie-info {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Expand the movie item to rectangle on hover */
+        .movie-item:hover .movie-info {
+            display: block;
+        }
+
+        /* Watch Trailer button */
+        .watch-trailer {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .watch-trailer:hover {
+            background-color: #ff4500;
+        }
+
+        #options-container {
+            margin: 20px 0;
+        }
+
+        #options-container button {
+            display: block;
+            margin: 15px auto;
+            border-radius: 20px;
+            padding: 10px;
+            width: 50%;
+            background: #333;
+            color: rgb(192, 172, 123);
+            border: 1px solid rgb(192, 172, 123);
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        #options-container button:hover {
+            background: rgb(192, 172, 123);
+            color: #333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            margin: 10% auto;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 20px;
+            width: 60%;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            color: #fff;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .movie-info {
+            margin-top: 10px;
+        }
+
+        .watch-trailer {
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <header class="header">
+            <img src="static/images/logo.png" alt="logo.png"   style="margin-left: 18px;" height="100px" width="100px">
+            <a href="/index" class="logo"  style="margin-left:10px;">CinemaScope</a>
+            <nav>
+                <div class="navbar">
+                    <a href="/index">Home</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Genres</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('display_movies_by_genre', genre='action') }}">Action</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='comedy') }}">Comedy</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='drama') }}">Drama</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='thriller') }}">Thriller</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='animation') }}">Animation</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='romance') }}">Romance</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='crime') }}">Crime</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='sci-fi') }}">Science Fiction</a>
+                        </div>
+                    </div>
+                    <a href="/contact_us">Contact</a>
+                    <a href="/web_series">Series</a>
+                    <a href="/about_us">About</a>
+                </div>
+            </nav>
+        </header>
+        <p class="h1">🎬Movie Mood Match</p>
+        <div id="question-container">
+            <h2 id="question"></h2>
+            <div id="options-container"></div>
+        </div>
+        <button id="next-button" class="btn" style="display: none;">Next</button>
+        <div id="result-container" class="hidden">
+            <h2>Your Movie Recommendations:</h2>
+            <ul id="result-list"></ul>
+            <a class="back" href="/question">Back to Questions</a>
+        </div>
+        <!-- Modal Popup -->
+        <div id="trailerModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="trailer"></div>
+                <div id="movie-details"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <!-- Footer Section -->
+            <footer class="footer">
+                <p>&copy; 2024 CinemaScope. <a style="color: #fff;" href="/policy">Privacy Policy</a> | Terms of Service</p>
+            </footer>
+        </div>
+        <script>
+            const questions = {
+                Sad: [
+                    {
+                        question: "When life gets tough, what kind of movie feels like the perfect escape?",
+                        options: [
+                            { text: "A heartwarming story that makes me believe in humanity again", movie: { title: "The Pursuit of Happyness", image: "{{ url_for('static', filename='images/The pursuit of happyness.jpg') }}", description: "A heartwarming story about a man who struggles to create a better life for his son.", year: "2006" } },
+                            { text: "Something so funny I can’t help but laugh out loud", movie: { title: "The Intouchables", image: "{{ url_for('static', filename='images/The Intouchables.jpg') }}", description: "After he becomes a quadriplegic from a paragliding accident, an aristocrat hires a young man from the projects to be his caregiver.", year: "2011" } },
+                            { text: "A touching drama that helps me process these emotions", movie: { title: "A Monster Calls", image: "{{ url_for('static', filename='images/A Monster Calls.jpg') }}", description: "Conor, a twelve-year-old boy, encounters an ancient tree monster who helps him cope with his mother's terminal illness and bullying at school.", year: "2016" } },
+                            { text: "An epic adventure to take me far away from reality", movie: { title: "The Secret Life of Walter Mitty", image: "{{ url_for('static', filename='images/The Secret Life of Walter Mitty.jpg') }}", description: "An epic adventure of a man who escapes his mundane life through vivid daydreams.", year: "2013" } }
+                        ],
+                    },
+                    {
+                        question: "How do you want the movie to leave you feeling by the end?",
+                        options: [
+                            { text: "Uplifted and ready to take on the world!", movie: { title: "Life of Pi", image: "{{ url_for('static', filename='images/Life of Pi.jpg') }}", description: "An uplifting adventure of survival and spirituality.", year: "2012" } },
+                            { text: "Moved to tears, but in a good way", movie: { title: "The Fault in Our Stars", image: "{{ url_for('static', filename='images/The Fault in Our Stars.jpg') }}", description: "Hazel and Gus are teenagers who meet at a cancer support group and fall in love, embarking on a journey to visit an author in Amsterdam.", year: "2014" } },
+                            { text: "Calm and reflective, with something to think about", movie: { title: "Good Will Hunting", image: "{{ url_for('static', filename='images/Good Will Hunting.jpg') }}", description: "A calm and thoughtful drama that deals with loss and redemption.", year: "1997" } },
+                            { text: "Like I’ve been on an emotional rollercoaster", movie: { title: "A Star is Born", image: "{{ url_for('static', filename='images/A Star is Born.png') }}", description: "A powerful emotional rollercoaster of love and tragedy.", year: "2018" } }
+                        ],
+                    },
+                    {
+                        question: "What kind of character journey would inspire you right now?",
+                        options: [
+                            { text: "Someone who fights against all odds and wins", movie: { title: "Erin Brockovich", image: "{{ url_for('static', filename='images/Erin Brockovich.jpg') }}", description: "A single mother becomes a legal assistant and helps to win a case against a powerful corporation.", year: "2000" } },
+                            { text: "A lovable goofball who finds joy in the small things", movie: { title: "Little Miss Sunshine", image: "{{ url_for('static', filename='images/Little Miss Sunshine.jpg') }}", description: "A dysfunctional family takes a road trip to support their daughter in a beauty pageant.", year: "2006" } },
+                            { text: "A complex character with flaws who learns and grows", movie: { title: "Silver Linings Playbook", image: "{{ url_for('static', filename='images/Silver Linings Playbook.jpg') }}", description: "A man with bipolar disorder tries to rebuild his life and forms an unlikely bond with a young widow.", year: "2012" } },
+                            { text: "A hero who saves the world (or at least their world)", movie: { title: "The Lion King", image: "{{ url_for('static', filename='images/The Lion King.jpg') }}", description: "A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.", year: "1994" } }
+                        ],
+                    },
+                    {
+                        question: "Are you in the mood for something modern, or would you prefer a timeless classic?",
+                        options: [
+                            { text: "Something modern that reflects today's world", movie: { title: "Nomadland", image: "{{ url_for('static', filename='images/Nomadland.jpg') }}", description: "A woman embarks on a journey through the American West, living as a modern-day nomad after losing everything in the Great Recession.", year: "2020" } },
+                            { text: "A classic that stands the test of time", movie: { title: "The Shawshank Redemption", image: "{{ url_for('static', filename='images/The Shawshank Redemption.jpg') }}", description: "The story of a man's resilience in prison and his ultimate escape.", year: "1994" } }
+                        ],
+                    }
+                ],
+                Happy: [
+                    {
+                        question: "Since you're already in a great mood, what kind of movie would make it even better?",
+                        options: [
+                            { text: "A hilarious comedy to keep the good vibes going", movie: { title: "Superbad", image: "/static/images/Superbad.png", description: "A hilarious coming-of-age story about two friends trying to make the most of their high school days.", year: "2007" } },
+                            { text: "An action-packed adventure with thrills and excitement", movie: { title: "Guardians of the Galaxy", image: "/static/images/Guardians of the Galaxy.jpg", description: "A group of intergalactic criminals must pull together to stop a fanatical warrior.", year: "2014" } },
+                            { text: "A sweet romance that makes me feel all warm and fuzzy", movie: { title: "Crazy, Stupid, Love", image: "/static/images/Crazy, Stupid, Love.jpg", description: "A comedy that follows a man learning how to date again after a divorce.", year: "2011" } },
+                            { text: "A family-friendly film that’s pure fun for everyone", movie: { title: "Zootopia", image: "/static/images/zootopia.jpg", description: "In a city of anthropomorphic animals, a bunny cop and a cynical con artist fox must work together.", year: "2016" } }
+                        ],
+                    },
+                    {
+                        question: "Do you like your happy movies short and sweet, or are you ready for something a little longer?",
+                        options: [
+                            { text: "Let’s keep it short and sweet!", movie: { title: "Toy Story", image: "/static/images/Toy story.jpg", description: "A story about toys that come to life when humans aren't around.", year: "1995" } },
+                            { text: "I don’t mind settling in for a couple of hours", movie: { title: "The Grand Budapest Hotel", image: "/static/images/The Grand Budapest Hotel.jpg", description: "A writer recounts the adventures of a legendary concierge and his protégé.", year: "2014" } },
+                            { text: "It doesn’t matter—I'm here for the experience!", movie: { title: "The Avengers", image: "/static/images/The Avengers.jpg", description: "Earth's mightiest heroes must come together to save the planet.", year: "2012" } }
+                        ],
+                    },
+                    {
+                        question: "Imagine the perfect setting for your movie—what vibe are you looking for?",
+                        options: [
+                            { text: "A big city with lots of hustle and bustle", movie: { title: "La La Land", image: "/static/images/La La Land.jpg", description: "A jazz musician and an aspiring actress fall in love in Los Angeles.", year: "2016" } },
+                            { text: "A magical or historical world that feels like a dream", movie: { title: "Harry Potter and the Sorcerer's Stone", image: "/static/images/Harry Potter and the Sorcerer’s Stone.jpg", description: "A young boy discovers he is a wizard and attends a magical school.", year: "2001" } },
+                            { text: "The great outdoors, with beautiful landscapes", movie: { title: "Into the Wild", image: "/static/images/Into the Wild.jpg", description: "A young man abandons his possessions and savings to journey across America.", year: "2007" } }
+                        ],
+                    },
+                    {
+                        question: "Are you in the mood for something that critics love, or just a feel-good gem?",
+                        options: [
+                            { text: "Give me the critically acclaimed masterpiece", movie: { title: "Parasite", image: "/static/images/Parasite.jpg", description: "A poor family schemes to become employed by a wealthy family.", year: "2019" } },
+                            { text: "I just want to enjoy something lighthearted and fun", movie: { title: "The Greatest Showman", image: "/static/images/The Greatest Showman.jpg", description: "The story of P.T. Barnum's creation of the circus and the lives of its star attractions.", year: "2017" } }
+                        ],
+                    }
+                ],
+                Neutral: [
+                    {
+                        question: "You’re feeling neutral, so what kind of story would suit your vibe?",
+                        options: [
+                            { text: "A thought-provoking drama that explores life’s complexities", movie: { title: "Her", image: "/static/images/Her.jpg", description: "A lonely writer develops an unlikely relationship with an operating system.", year: "2013" } },
+                            { text: "A feel-good comedy that makes me chuckle", movie: { title: "The Intern", image: "/static/images/The Intern.jpg", description: "A 70-year-old widower becomes an intern at an online fashion retailer.", year: "2015" } },
+                            { text: "An intriguing mystery that keeps me guessing", movie: { title: "Gone Girl", image: "/static/images/Gone Girl.jpg", description: "A man becomes the prime suspect in the disappearance of his wife.", year: "2014" } },
+                            { text: "A light-hearted animated film that’s visually stunning", movie: { title: "Spirited Away", image: "/static/images/Spirited Away.jpg", description: "A young girl navigates a magical world after her parents are transformed into pigs.", year: "2001" } }
+                        ],
+                    },
+                    {
+                        question: "What pace are you in the mood for?",
+                        options: [
+                            { text: "Something quick and engaging", movie: { title: "Inside Out", image: "/static/images/Inside Out.jpg", description: "Inside the mind of a young girl, emotions try to guide her through life's challenges.", year: "2015" } },
+                            { text: "I don’t mind a slower, more reflective pace", movie: { title: "The Secret Life of Walter Mitty", image: "/static/images/The Secret Life of Walter Mitty.jpg", description: "An epic adventure of a man who escapes his mundane life through vivid daydreams.", year: "2013" } },
+                            { text: "I’m open to either; let’s see what’s out there!", movie: { title: "Inception", image: "/static/images/Inception.jpg", description: "A thief who steals corporate secrets through the use of dream-sharing technology.", year: "2010" } }
+                        ],
+                    },
+                    {
+                        question: "What kind of atmosphere would you like for your viewing experience?",
+                        options: [
+                            { text: "A cozy, heartwarming vibe", movie: { title: "The Hundred-Foot Journey", image: "/static/images/The Hundred-Foot Journey.jpg", description: "An Indian family opens a restaurant in the south of France, leading to a culinary battle.", year: "2014" } },
+                            { text: "A suspenseful, thrilling environment", movie: { title: "Shutter Island", image: "/static/images/Shutter Island.jpg", description: "A U.S. Marshal investigates the disappearance of a patient from a mental institution.", year: "2010" } }
+                        ],
+                    },
+                    {
+                        question: "Do you prefer familiar stories or something new and different?",
+                        options: [
+                            { text: "Familiar tales that comfort me", movie: { title: "The Princess Bride", image: "/static/images/The Princess Bride.jpg", description: "A fairy tale adventure featuring true love and a dangerous journey.", year: "1987" } },
+                            { text: "New and unique stories that surprise me", movie: { title: "Get Out", image: "/static/images/Get Out.jpg", description: "A young African-American man visits his white girlfriend's family, uncovering a disturbing secret.", year: "2017" } }
+                        ],
+                    }
+                ],
+            };
+
+            let selectedMood = '';
+            let currentQuestionIndex = 0;
+            let selectedMovies = [];
+            const questionElement = document.getElementById('question');
+            const optionsContainer = document.getElementById('options-container');
+            const nextButton = document.getElementById('next-button');
+            const resultContainer = document.getElementById('result-container');
+            const resultList = document.getElementById('result-list');
+            const trailerModal = document.getElementById('trailerModal');
+            const trailerContainer = document.getElementById('trailer');
+            const movieDetailsContainer = document.getElementById('movie-details');
+
+            const YOUTUBE_API_KEY = 'AIzaSyAS2p4SnRFWWYhDVB6FZ-hn14FWLubxI1s';
+
+            function startGame() {
+                currentQuestionIndex = 0;
+                selectedMovies = [];
+                selectedMood = '';
+                nextButton.style.display = 'none';
+                resultContainer.classList.add('hidden');
+                showMoodSelection();
+            }
+
+            function showMoodSelection() {
+                questionElement.innerText = "How are you feeling right now? Let's set the tone!";
+                optionsContainer.innerHTML = `
+                <button class="btn" onclick="selectMood('Sad')">Feeling down and could use a pick-me-up 😢</button>
+                <button class="btn" onclick="selectMood('Happy')">I'm in a great mood! Keep it light and fun 😊</button>
+                <button class="btn" onclick="selectMood('Neutral')">I’m just chilling, no strong feelings 😐</button>
+            `;
+            }
+
+            function selectMood(mood) {
+                selectedMood = mood;
+                currentQuestionIndex = 0;
+                selectedMovies = [];
+                showQuestion();
+            }
+
+            function showQuestion() {
+                const currentQuestions = questions[selectedMood];
+                const currentQuestion = currentQuestions[currentQuestionIndex];
+                questionElement.innerText = currentQuestion.question;
+                optionsContainer.innerHTML = '';
+
+                currentQuestion.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.innerText = option.text;
+                    button.classList.add('btn');
+                    button.addEventListener('click', () => selectOption(option.movie));
+                    optionsContainer.appendChild(button);
+                });
+
+                nextButton.style.display = 'none';
+            }
+
+            function selectOption(movie) {
+                selectedMovies.push(movie);
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < questions[selectedMood].length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }
+
+            function showResult() {
+                questionElement.innerText = '';
+                optionsContainer.innerHTML = '';
+                nextButton.style.display = 'none';
+
+                resultList.innerHTML = '';
+                selectedMovies.forEach(movie => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('movie-item');
+                    listItem.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}">
+                    <div class="movie-info">
+                        <strong>${movie.title}</strong><br>
+                        ${movie.description}, ${movie.year}<br>
+                        <span class="watch-trailer" onclick="fetchYouTubeTrailer('${movie.title}', '${movie.description}')">Watch Trailer</span>
+                    </div>
+                `;
+                    resultList.appendChild(listItem);
+                });
+
+                resultContainer.classList.remove('hidden');
+            }
+
+            function fetchYouTubeTrailer(movieTitle, movieDescription) {
+                // Make YouTube API call to search for the trailer
+                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(movieTitle)}+trailer&type=video&key=${YOUTUBE_API_KEY}`;
+
+                fetch(searchUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            const videoId = data.items[0].id.videoId;
+                            openTrailer(videoId, movieTitle, movieDescription);
+                        } else {
+                            alert('Trailer not found');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching trailer:', error);
+                        alert('Error fetching trailer');
+                    });
+            }
+
+            function openTrailer(videoId, title, description) {
+                // Embed YouTube trailer in the modal
+                trailerContainer.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+                // Add movie details below the trailer
+                movieDetailsContainer.innerHTML = `
+                <h3>${title}</h3>
+                <p>${description}</p>
+            `;
+
+                // Show the modal
+                trailerModal.style.display = 'block';
+            }
+
+            function closeModal() {
+                trailerModal.style.display = 'none';
+                trailerContainer.innerHTML = ''; // Stop trailer
+            }
+
+            // Initialize the game
+            startGame();
+        </script>
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

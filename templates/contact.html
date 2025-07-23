@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact-CinemaScope</title>
+    <link rel="icon" href="/static/images/favicon-32x32.png" type="image/x-icon">
+    <style>
+        /* General form styles */
+        /* General form styles */
+        body {
+            color: #222;
+            font-family: Courier New;
+            font-size: 14px;
+            line-height: 24px;
+            margin: 0;
+            /* Ensure no default margin */
+        }
+
+        /* Overlay Container */
+        .hero {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 540px;
+        }
+
+        /* Background Image */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/Design.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .logo {
+            color: #fff;
+            font-family: Courier New;
+            width: 425px;
+            height: auto;
+            font-size: 49px;
+            margin: 20px 0;
+            /* Adjust margins for better spacing */
+        }
+
+        header {
+            position: fixed;
+            /* Fix the header to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Ensure the header spans the full width */
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Optional: Make the header semi-transparent */
+            border-radius: 50px 20px;
+            color: white;
+            padding: 2px;
+            z-index: 1000;
+            /* Ensure the header stays on top of the background and overlay */
+        }
+
+
+
+
+        .navbar {
+            display: flex;
+            font-family: Courier New;
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+            margin-right: 50px;
+            background-color: rgba(0, 0, 0, 0);
+            padding: 10px 0;
+            text-align: center;
+            margin-right: 10px;
+            margin-bottom: 1px;
+        }
+
+        .navbar a {
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            color: white;
+        }
+
+        nav a:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            text-align: center;
+            color: white;
+            margin-left: 20px;
+            font-size: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .dropdown button:hover {
+            color: #daa520;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 20px 50px;
+            z-index: 1;
+            padding: 12px 16px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .hero {
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            /* Makes the header a flex container */
+            justify-content: space-between;
+            /* Space between logo and navbar */
+            align-items: center;
+            /* Centers items vertically */
+            padding: 10px 20px;
+            /* Adds padding */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Optional background color */
+            border-radius: 50px 20px;
+        }
+
+        .logo {
+            font-size: 45px;
+            /* Adjust logo font size */
+            font-weight: bold;
+            /* Makes logo bold */
+            margin-right: 500px;
+        }
+
+        .navbar {
+            display: flex;
+            /* Makes the navbar a flex container */
+            gap: 20px;
+            /* Space between navbar items */
+        }
+
+        .dropdown {
+            position: relative;
+            /* Positioning for dropdown */
+        }
+
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            /* Shows dropdown on hover */
+        }
+
+        .section {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 250px;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/background overlay3.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .h1 {
+            font-family: Courier New;
+            font-size: 38px;
+            color: white;
+            font: bold;
+            margin-top: 150px;
+        }
+        .h2 {
+            font-family: Courier New;
+            font-size: 18px;
+            color: white;
+            font: bold;
+        }
+
+       
+        .form-container {
+            width: 400px;
+            background: linear-gradient(#212121, #212121) padding-box,
+            linear-gradient(145deg, transparent 35%, rgb(192, 172, 123), #ece818) border-box;
+            border: 2px solid transparent;
+            padding: 32px 24px;
+            font-size: 14px;
+            font-family: inherit;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+            border-radius: 16px;
+        }
+
+        .form-container button:active {
+            scale: 0.95;
+        }
+
+        .form-container .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-container .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .form-container .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #717171;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .form-container .form-group input {
+            width: 80%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            background-color: transparent;
+            border: 1px solid #414141;
+        }
+
+        .form-container .form-group textarea {
+            width: 90%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            resize: none;
+            color: #fff;
+            height: 96px;
+            border: 1px solid #414141;
+            background-color: transparent;
+            font-family: inherit;
+        }
+
+        .form-container .form-group input::placeholder {
+            opacity: 0.5;
+        }
+
+        .form-container .form-group input:focus {
+            outline: none;
+            border-color: rgb(192, 172, 123);
+        }
+
+        .form-container .form-group textarea:focus {
+            outline: none;
+            border-color: rgb(192, 172, 123);
+        }
+        .form-container .form-submit-btn {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            align-self: flex-start;
+            font-family: inherit;
+            color: #717171;
+            font-weight: 600;
+            width: 40%;
+            background: #313131;
+            border: 1px solid #414141;
+            padding: 12px 16px;
+            font-size: inherit;
+            gap: 8px;
+            margin-top: 8px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .form-container .form-submit-btn:hover {
+            background-color: #fff;
+            border-color: #fff;
+        }
+
+
+
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #313131;;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+            margin: auto;
+        }
+
+        /* Button group inside modal */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        /* Buttons */
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* On hover */
+        button:hover {
+            background-color: #ddd;
+        }
+
+        /* Image inside button */
+        button img {
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        /* Close button */
+        #closeModal {
+            margin-top: 20px;
+            background-color: rgb(192, 172, 123);;
+            color: white;
+        }
+
+        /* Modal open class */
+        .modal.show {
+            display: flex;
+            /* Show modal when needed */
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 20px;
+            text-align: right;
+            margin-top: auto;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <header class="header">
+            <img src="static/images/logo.png" alt="logo.png"   style="margin-left: 18px;" height="100px" width="100px">
+            <a href="/index" class="logo"  style="margin-left:10px;">CinemaScope</a>
+            <nav>
+                <div class="navbar">
+                    <a href="/index">Home</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Genres</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('display_movies_by_genre', genre='action') }}">Action</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='comedy') }}">Comedy</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='drama') }}">Drama</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='thriller') }}">Thriller</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='animation') }}">Animation</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='romance') }}">Romance</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='crime') }}">Crime</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='sci-fi') }}">Science Fiction</a>
+                        </div>
+                    </div>
+                    <a href="/question">Mood</a>
+                    <a href="/web_series">Series</a>
+                    <a href="/about_us">About</a>
+                </div>
+            </nav>
+        </header>
+        <p class="h1">Contact Us</p>
+        <p class="h2">If this form does not work, please feel free to email us at cinemascope956@gmail.com</p>
+        <div class="form-container">
+            <form class="form">
+                <div class="form-group">
+                    <label for="email">Your Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="textarea">How Can We Help You?</label>
+                    <textarea name="textarea" id="textarea" rows="10" cols="50" required></textarea>
+                </div>
+                <button type="button" id="sendMessage">Send Message</button>
+            </form>
+        </div>
+        
+        <!-- Modal Structure -->
+        <div id="emailModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <h4>Select a platform to send your message:</h4>
+                <div class="button-group">
+                    <button type="button" id="sendGmail">
+                        <img src="/static/images/google.png" alt="Gmail Logo"> Gmail
+                    </button>
+                    <button type="button" id="sendOutlook">
+                        <img src="/static/images/outlook.png" alt="Outlook Logo"> Outlook
+                    </button>
+                </div>
+                <button type="button" id="closeModal">Cancel</button>
+            </div>
+        </div>
+        <div class="section">
+            <!-- Footer Section -->
+            <footer class="footer">
+                <p>&copy; 2024 CinemaScope. <a style="color: #fff;" href="/policy">Privacy Policy</a> | Terms of Service</p>
+            </footer>
+        </div>
+        
+        <script>
+        // Function to handle mailto links
+        function sendEmail(platform) {
+            var userEmail = document.getElementById('email').value;
+            var issueContent = document.getElementById('textarea').value;  // Use correct ID here
+        
+            // Encode the subject and body for the email
+            var subject = `Issue from ${encodeURIComponent(userEmail)}`;
+            var body = encodeURIComponent(issueContent);
+        
+            var mailLink;
+        
+            // Determine the email platform
+            if (platform === 'gmail') {
+                mailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=cinemascope956@gmail.com&su=${subject}&body=${body}`;
+            } else if (platform === 'outlook') {
+                mailLink = `https://outlook.live.com/owa/?path=/mail/action/compose&to=cinemascope956@gmail.com&subject=${subject}&body=${body}`;
+            }
+        
+            // Open the mail link in a new tab/window
+            window.open(mailLink, '_blank');
+        }
+        
+        // Open modal when "Send Message" button is clicked
+        document.getElementById('sendMessage').addEventListener('click', function () {
+            document.getElementById('emailModal').style.display = 'block';  // Show modal
+        });
+        
+        // Close modal when "Cancel" button is clicked
+        document.getElementById('closeModal').addEventListener('click', function () {
+            document.getElementById('emailModal').style.display = 'none';  // Hide modal
+        });
+        
+        // Add event listeners for each button inside modal
+        document.getElementById('sendGmail').addEventListener('click', function () {
+            sendEmail('gmail');
+            document.getElementById('emailModal').style.display = 'none';  // Close modal after selection
+        });
+        document.getElementById('sendOutlook').addEventListener('click', function () {
+            sendEmail('outlook');
+            document.getElementById('emailModal').style.display = 'none';  // Close modal after selection
+        });
+        
+        </script>
+        
+
+</html>

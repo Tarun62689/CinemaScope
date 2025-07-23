@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Series-CinemaScope</title>
+    <link rel="icon" href="/static/images/favicon-32x32.png" type="image/x-icon">
+    <style>
+        /* General form styles */
+        body {
+            color: #222;
+            font-family: Courier New;
+            font-size: 14px;
+            line-height: 24px;
+            margin: 0;
+            /* Ensure no default margin */
+        }
+
+        /* Overlay Container */
+        .hero {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            text-align: center;
+            z-index: 1;
+            min-height: 540px;
+        }
+
+        /* Background Image */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Use height for better coverage */
+            background-image: url('/static/images/background overlay3.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Overlay Effect */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: -1;
+        }
+
+        .logo {
+            color: #fff;
+            font-family: Courier New;
+            width: 425px;
+            height: auto;
+            font-size: 49px;
+            margin: 20px 0;
+            /* Adjust margins for better spacing */
+        }
+
+        header {
+            position: fixed;
+            /* Fix the header to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Ensure the header spans the full width */
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Optional: Make the header semi-transparent */
+            border-radius: 50px 20px;
+            color: white;
+            padding: 2px;
+            z-index: 1000;
+            /* Ensure the header stays on top of the background and overlay */
+        }
+
+
+
+
+        .navbar {
+            display: flex;
+            font-family: Courier New;
+            font-size: 20px;
+            align-items: center;
+            /* Vertically center navbar items */
+            justify-content: center;
+            margin-right: 50px;
+            background-color: rgba(0, 0, 0, 0);
+            /* Optional background color for the navbar */
+            padding: 10px 0;
+            text-align: center;
+            margin-left: 10px;
+            margin-bottom: 1px;
+        }
+
+        .navbar a {
+            display: block;
+            text-decoration: none;
+            padding: 10px 15px;
+            color: white;
+        }
+
+        nav a:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            text-align: center;
+            color: white;
+            margin-left: 20px;
+            font-size: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color: inherit;
+            font-family: inherit;
+            /* Important for vertical align on mobile phones */
+            margin: 0;
+            /* Important for vertical align on mobile phones */
+        }
+
+        .dropdown button:hover {
+            color: #daa520;
+            text-decoration: underline;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 20px 50px;
+            z-index: 1;
+            padding: 12px 16px;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .hero {
+            width: 100%;
+            /* Ensures the hero section takes the full width */
+        }
+
+        .header {
+            display: flex;
+            /* Makes the header a flex container */
+            justify-content: space-between;
+            /* Space between logo and navbar */
+            align-items: center;
+            /* Centers items vertically */
+            padding: 10px 20px;
+            /* Adds padding */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Optional background color */
+            border-radius: 50px 20px;
+        }
+
+        .logo {
+            font-size: 45px;
+            /* Adjust logo font size */
+            font-weight: bold;
+            /* Makes logo bold */
+            margin-right: 500px;
+        }
+
+        .navbar {
+            display: flex;
+            /* Makes the navbar a flex container */
+            gap: 20px;
+            /* Space between navbar items */
+        }
+
+        .dropdown {
+            position: relative;
+            /* Positioning for dropdown */
+        }
+
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            /* Shows dropdown on hover */
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        h1 {
+            font-family: Courier New;
+            font-size: 30px;
+            color: white;
+            font: bold;
+            margin-top: 110px;
+        }
+
+        h2 {
+            font-family: Courier New;
+            font-size: 28px;
+            color: rgb(192, 172, 123);
+            font: bold;
+            margin-top: 50px;
+        }
+
+        .series-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow items to wrap to the next line */
+            justify-content: space-around;
+            /* Space out the items */
+        }
+
+        .series {
+            margin: 10px;
+            width: 200px;
+            border-radius: 8px;
+            /* Optional: to round the corners */
+            position: relative;
+            /* Needed for the overlay effect */
+            overflow: hidden;
+            /* Ensure overflow is hidden */
+        }
+
+        .series img {
+            max-width: 100%;
+            /* Make the image responsive */
+            height: auto;
+            transition: transform 0.3s ease;
+            /* Smooth transition */
+        }
+
+        .series:hover img {
+            transform: scale(1.1);
+            /* Enlarge the image on hover */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Semi-transparent black */
+            color: white;
+            opacity: 0;
+            /* Initially hidden */
+            transition: opacity 0.3s ease;
+            /* Smooth transition */
+            display: flex;
+            /* Center the content */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .series:hover .overlay {
+            opacity: 1;
+            /* Show the overlay on hover */
+        }
+
+        .series h2 {
+            margin: 0;
+            font-size: 1.5em;
+            /* Adjust font size if needed */
+        }
+
+        .watch-trailer {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #b62828;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .watch-trailer:hover {
+            background-color: #a44343;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.9);
+            /* Black w/ opacity */
+            padding-top: 60px;
+            /* Place content 60px from the top */
+        }
+
+        .modal-content {
+            border-radius: 8px;
+            background-color: #222;
+            margin: 5% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #222;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <header class="header">
+            <img src="static/images/logo.png" alt="logo.png"   style="margin-left: 18px;" height="100px" width="100px">
+            <a href="/index" class="logo"  style="margin-left:10px;">CinemaScope</a>
+            <nav>
+                <div class="navbar">
+                    <a href="/index">Home</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Genres</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('display_movies_by_genre', genre='action') }}">Action</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='comedy') }}">Comedy</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='drama') }}">Drama</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='thriller') }}">Thriller</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='animation') }}">Animation</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='romance') }}">Romance</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='crime') }}">Crime</a>
+                            <a href="{{ url_for('display_movies_by_genre', genre='sci-fi') }}">Science Fiction</a>
+                        </div>
+                    </div>
+                    <a href="/question">Mood</a>
+                    <a href="/contact_us">Contact</a>
+                    <a href="/about_us">About</a>
+                </div>
+            </nav>
+        </header>
+        <h1>The Best Web Series of All Time</h1>
+        <div class="series-container">
+            {% for series in webseries %}
+            <div class="series">
+                <img src="{{ series['poster'] }}" alt="Poster of {{ series['title'] }}">
+                <div class="overlay">
+                    <h2>{{ series['title'] }}</h2>
+                    <p><strong>Genre:</strong> {{ series['genre'] }}</p>
+                    <!--p><strong>Description:</strong> {{ series['description'] }}</p-->
+                    <p><strong>IMDB Rating:</strong> {{ series['rating'] }}</p>
+                    <p><strong>Streaming On:</strong> ({{ series['platform'] }})</p>
+                    <span class="watch-trailer" data-title="{{ series['title'] }}">Watch Trailer</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="trailer" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        //'API_KEY' 
+        const apiKey = 'AIzaSyAS2p4SnRFWWYhDVB6FZ-hn14FWLubxI1s';
+        const modal = document.getElementById("myModal");
+        const trailer = document.getElementById("trailer");
+        const closeModal = document.getElementsByClassName("close")[0];
+
+        document.querySelectorAll(".watch-trailer").forEach(button => {
+            button.onclick = function () {
+                const title = this.getAttribute("data-title");
+                fetchTrailer(title);
+            };
+        });
+
+        function fetchTrailer(title) {
+            const query = encodeURIComponent(title + " trailer");
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${query}&key=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items.length > 0) {
+                        const videoId = data.items[0].id.videoId;
+                        trailer.src = `https://www.youtube.com/embed/${videoId}`; // Set the src of the iframe to the video ID
+                        modal.style.display = "block"; // Show the modal
+                    } else {
+                        alert("Trailer not found!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching trailer:", error);
+                    alert("Error fetching trailer.");
+                });
+        }
+
+        closeModal.onclick = function () {
+            modal.style.display = "none"; // Hide the modal
+            trailer.src = ""; // Stop the video when closing
+        };
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none"; // Hide the modal
+                trailer.src = ""; // Stop the video when closing
+            }
+        };
+    </script>
+</body>
+
+</html>

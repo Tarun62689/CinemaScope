@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ movie_name }} - Recommendations</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    /* General form styles */
+    /* General form styles */
+    body {
+      color: #222;
+      font-family: Courier New;
+      font-size: 14px;
+      line-height: 24px;
+      margin: 0;
+      /* Ensure no default margin */
+    }
+
+    /* Overlay Container */
+    .hero {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #222;
+      text-align: center;
+      z-index: 1;
+
+    }
+
+    /* Background Image */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* Use height for better coverage */
+      background-image: url('/static/images/background overlay3.png');
+      background-size: cover;
+      background-position: center;
+      z-index: -3;
+    }
+
+    /* Overlay Effect */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0);
+      z-index: -1;
+    }
+
+    .logo {
+      color: #fff;
+      font-family: Courier New;
+      width: 425px;
+      height: auto;
+      font-size: 49px;
+      margin: 20px 0;
+      /* Adjust margins for better spacing */
+    }
+
+    header {
+      position: fixed;
+      /* Fix the header to the top */
+      top: 0;
+      left: 0;
+      width: 100%;
+      /* Ensure the header spans the full width */
+      background-color: rgba(0, 0, 0, 0.5);
+      /* Optional: Make the header semi-transparent */
+      border-radius: 50px 20px;
+      color: white;
+      padding: 2px;
+      z-index: 1000;
+      /* Ensure the header stays on top of the background and overlay */
+    }
+
+
+
+
+    .navbar {
+      display: flex;
+      font-family: Courier New;
+      font-size: 20px;
+      align-items: center;
+      /* Vertically center navbar items */
+      justify-content: center;
+      margin-right: 50px;
+      background-color: rgba(0, 0, 0, 0);
+      /* Optional background color for the navbar */
+      padding: 10px 0;
+      text-align: center;
+      margin-left: 10px;
+      margin-bottom: 1px;
+    }
+
+    .navbar a {
+      display: block;
+      text-decoration: none;
+      padding: 10px 15px;
+      color: white;
+    }
+
+    nav a:hover {
+      color: #daa520;
+      text-decoration: underline;
+    }
+
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown button {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      text-align: center;
+      color: white;
+      margin-left: 20px;
+      font-size: 20px;
+      padding: 10px 15px;
+      border: none;
+      background-color: inherit;
+      font-family: inherit;
+      /* Important for vertical align on mobile phones */
+      margin: 0;
+      /* Important for vertical align on mobile phones */
+    }
+
+    .dropdown button:hover {
+      color: #daa520;
+      text-decoration: underline;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.4);
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      border-radius: 20px 50px;
+      z-index: 1;
+      padding: 12px 16px;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 8px 12px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .hero {
+      width: 100%;
+      /* Ensures the hero section takes the full width */
+    }
+
+    .header {
+      display: flex;
+      /* Makes the header a flex container */
+      justify-content: space-between;
+      /* Space between logo and navbar */
+      align-items: center;
+      /* Centers items vertically */
+      padding: 10px 20px;
+      /* Adds padding */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Optional background color */
+      border-radius: 50px 20px;
+    }
+
+    .logo {
+      font-size: 45px;
+      /* Adjust logo font size */
+      font-weight: bold;
+      /* Makes logo bold */
+      margin-right: 500px;
+    }
+
+    .navbar {
+      display: flex;
+      /* Makes the navbar a flex container */
+      gap: 20px;
+      /* Space between navbar items */
+    }
+
+    .dropdown {
+      position: relative;
+      /* Positioning for dropdown */
+    }
+
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+      /* Shows dropdown on hover */
+    }
+
+    /* Footer styling */
+    footer {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 20px;
+      text-align: right;
+      margin-top: auto;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+
+
+    .movie-name {
+      color: rgb(192, 172, 123);
+      font-family: Courier New;
+      font-size: 30px;
+      font: bold;
+    }
+
+    .movie-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      /* Center the movie boxes */
+    }
+
+    .movies-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .movie-box {
+      position: relative;
+      flex: 0 1 calc(20% - 20px);
+      /* 20% width minus margin to fit 5 items in one row */
+      box-sizing: border-box;
+      /* Ensure padding and margin are included in width */
+    }
+
+    .poster-container {
+      display: flex;
+      flex-wrap: wrap;
+      width: 200px;
+      margin: 10px;
+      border-radius: 8px;
+      /* Optional: to round the corners */
+      position: relative;
+      /* Needed for the overlay effect */
+      overflow: hidden;
+    }
+
+    .poster-container img {
+      width: 100%;
+      /* Use 100% of the container width */
+      transition: transform 0.3s;
+    }
+
+    .poster-container:hover img {
+      transform: scale(1.05);
+      /* Scale the image on hover */
+    }
+
+    .movie-details {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .poster-container:hover .movie-details {
+      opacity: 1;
+      /* Show details on hover */
+    }
+
+    #h1 {
+      font-family: Courier New;
+      font-size: 30px;
+      color: white;
+      font: bold;
+      margin-top: 110px;
+    }
+
+    /* Footer styling */
+    footer {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 20px;
+      text-align: right;
+      margin-top: auto;
+    }
+
+    /* Modal styling */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 80%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+    }
+
+    .close {
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: bold;
+      color: #aaa;
+    }
+
+    .close:hover {
+      color: #000;
+    }
+
+    .modal-body {
+      margin-top: 15px;
+    }
+
+    /* Modal Styling */
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      /* Semi-transparent black background */
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #222;
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      width: 95%;
+      max-width: 1000px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      
+    }
+
+    @media (min-width: 768px) {
+      .modal-content {
+        flex-direction: row;
+        /* Landscape layout on larger screens */
+        gap: 20px;
+      }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #f00;
+      cursor: pointer;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.1);
+      color: #c00;
+    }
+
+    #movieRecommendation{
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* Chart Styling */
+    #chart {
+      width: 100%;
+      max-height: 300px;
+      margin-top: 20px;
+    }
+
+    /* Scrollbar Customization (Optional) */
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 10px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hero">
+    <header class="header">
+      <img src="static/images/logo.png" alt="logo" height="100px" width="100px" style="margin-left: 18px;">
+      <a href="/index" class="logo" style="margin-left:10px;">CinemaScope</a>
+      <nav>
+        <div class="navbar">
+          <a href="/index">Home</a>
+          <div class="dropdown">
+            <button class="dropbtn">Genres</button>
+            <div class="dropdown-content">
+              <a href="{{ url_for('display_movies_by_genre', genre='action') }}">Action</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='comedy') }}">Comedy</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='drama') }}">Drama</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='thriller') }}">Thriller</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='animation') }}">Animation</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='romance') }}">Romance</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='crime') }}">Crime</a>
+              <a href="{{ url_for('display_movies_by_genre', genre='sci-fi') }}">Science Fiction</a>
+            </div>
+          </div>
+          <a href="/question">Mood</a>
+          <a href="/web_series">Series</a>
+          <a href="/contact_us">Contact</a>
+          <a href="/about_us">About</a>
+        </div>
+      </nav>
+    </header>
+    <div id="h1">Recommendations for "{{ movie_name }}"</div>
+
+    <!-- Movie Recommendations Grid -->
+    <div class="movie-container">
+      <div class="movies-grid">
+        {% for i in range(recommended_movie_names|length) %}
+        <div class="movie-box">
+          <div class="poster-container" onclick="showMovieDetails('{{ recommended_movie_names[i] }}')">
+            <img src="{{ recommended_movie_posters[i] }}" alt="Movie Poster {{ i+1 }}">
+            <div class="movie-details">
+              <p class="movie-name">{{ recommended_movie_names[i] }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Modal for Movie Details -->
+    <div id="movieModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="movieTitle">Movie Title</h2>
+        <!-- <img id="moviePoster" src="" alt="Movie Poster" style="max-width: 100%; border-radius: 10px; margin-bottom: 20px;"> -->
+        <p id="moviePlot" class="movie-info"></p>
+        <p id="movieYear" class="movie-info"></p>
+        <p id="movieGenre" class="movie-info"></p>
+        <p id="movieRuntime" class="movie-info"></p>
+        <p id="movieDirector" class="movie-info"></p>
+        <p id="movieActors" class="movie-info"></p>
+        <!-- <p id="movieLanguage" class="movie-info"></p>
+    <p id="movieCountry" class="movie-info"></p> -->
+        <!-- <p id="movieAwards" class="movie-info"></p> -->
+        <!-- <p id="movieBoxOffice" class="movie-info"></p> -->
+        <p id="movieRecommendation" class="movie-info"></p>
+        <canvas id="chart"></canvas>
+      </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2024 CinemaScope.   <a style="color: #fff;" href="/policy">Privacy Policy</a>| Terms of Service</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+  const API_KEY = '81685481'; // Replace with your OMDB API key
+
+let chartInstance = null; // Keep a reference to the chart instance
+
+function showMovieDetails(movieName) {
+  const url = `https://www.omdbapi.com/?t=${encodeURIComponent(movieName)}&apikey=${API_KEY}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.Response === 'True') {
+        // Populate modal
+        document.getElementById('movieTitle').textContent = data.Title || 'No Title';
+        document.getElementById('moviePlot').innerHTML = `<span>Plot:</span> ${data.Plot || 'No description available.'}`;
+        document.getElementById('movieYear').innerHTML = `<span>Year:</span> ${data.Year || 'Unknown'}`;
+        document.getElementById('movieGenre').innerHTML = `<span>Genre:</span> ${data.Genre || 'Unknown'}`;
+        document.getElementById('movieRuntime').innerHTML = `<span>Runtime:</span> ${data.Runtime || 'Unknown'}`;
+        document.getElementById('movieDirector').innerHTML = `<span>Director:</span> ${data.Director || 'Unknown'}`;
+        document.getElementById('movieActors').innerHTML = `<span>Actors:</span> ${data.Actors || 'Unknown'}`;
+
+        // Ratings and recommendation
+        const ratings = {};
+        (data.Ratings || []).forEach(rating => {
+          if (rating.Source === 'Internet Movie Database') {
+            ratings['IMDb'] = parseFloat(rating.Value.replace('/10', '').trim()) * 10;
+          } else if (rating.Source === 'Rotten Tomatoes') {
+            ratings['Rotten Tomatoes'] = parseFloat(rating.Value.replace('%', '').trim());
+          } else if (rating.Source === 'Metacritic') {
+            ratings['Metacritic'] = parseFloat(rating.Value.replace('/100', '').trim());
+          }
+        });
+
+        const averageRating = Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length || 0;
+        const recommendation = averageRating > 60 ? 'Recommended 👍' : 'Not Recommended 👎';
+        document.getElementById('movieRecommendation').innerHTML = `<span>Recommendation:</span> ${recommendation}`;
+
+        // Create chart
+        createChart(ratings);
+
+        // Open modal
+        openModal();
+      } else {
+        alert(data.Error || 'Movie details not found.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to fetch movie details.');
+    });
+}
+
+function createChart(ratings) {
+  const ctx = document.getElementById('chart').getContext('2d');
+
+  // Destroy the existing chart instance if it exists
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+
+  // Create a new chart instance and assign it to the variable
+  chartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(ratings),
+      datasets: [{
+        label: 'Ratings (%)',
+        data: Object.values(ratings),
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        borderColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+
+function openModal() {
+  document.getElementById('movieModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('movieModal').style.display = 'none';
+}
+
+  </script>
+</body>
+
+</html>
